@@ -11,9 +11,12 @@ class SobelOperator
 	
 	public function applyFilter($image, array $options = [])
 	{
+		$isFlat = (isset($options['flat']) && $options['flat'] === true);
+		$isReturnThreshold = (isset($options['return_threshold']) && $options['return_threshold'] === true);
+		$threshold = isset($options['threshold']) ? (int)$options['threshold'] : null;
+		
 		$width = imagesx($image);
 		$height = imagesy($image);
-		$isFlat = (isset($options['flat']) && $options['flat'] === true);
 		
 		imagefilter($image, IMG_FILTER_GRAYSCALE);
 		
@@ -34,7 +37,7 @@ class SobelOperator
 			}
 		}
 		
-		$maxValue = 0;
+		$maxValue = $sum = $sumCount = 0;
 		$offsetX = ($this->matrixSizeX - 1) / 2;
 		$offsetY = ($this->matrixSizeY - 1) / 2;
 		for ($x = 0, $toX = $width - $this->matrixSizeX; $x < $toX; ++$x) {
@@ -47,14 +50,17 @@ class SobelOperator
 					}
 				}
 				$val = ceil(sqrt(($pixelX ** 2) + ($pixelY ** 2)));
-				
+				$sum += $val;
+				$sumCount++;
 				$maxValue = max($maxValue, $val);
 				
 				$finalImage[$offsetX + $x][$offsetY + $y] = $val;
 			}
 		}
 		
-		$threshold = isset($options['threshold']) ? intval($options['threshold']) * $maxValue / 100  : 0;
+		if ($threshold === null) {
+			$threshold = $sum / $sumCount;
+		}
 		
 		for ($x = 0; $x < $width; ++$x) {
 			for ($y = 0; $y < $height; ++$y) {
@@ -72,6 +78,13 @@ class SobelOperator
 				
 				imagesetpixel($newImage, $x, $y, $colors[$val]);
 			}
+		}
+		
+//		var_dump($threshold);
+//		exit;
+		
+		if ($isReturnThreshold) {
+			return [$newImage, $threshold];
 		}
 		
 		return $newImage;
