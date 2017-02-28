@@ -25,20 +25,13 @@ imagepng($sobel->applyFilter($image));
 ```
 <img src="./images/1.jpg">
 
-Using threshold (value must be between 0-100)
-```php
-<?php
+### Options
+| Parameter | Description |
+|:-----|:------------|
+| `flat` | Enables flat mode |
+| `threshold` | Set threshold manually. In case that parameter is not set, algorithm choose threshold automatically |
+| `return_threshold` | Return an array of two elements. First one is an image with Sobel filter applied, second element is value of applied threshold |
 
-$sobel = new \Qmegas\SobelOperator();
-$image = imagecreatefromjpeg('1.jpg');
-header('Content-type: image/png');
-imagepng($sobel->applyFilter($image, [
-	'threshold' => 30,
-]));
-```
-<img src="./images/2.jpg">
-
-Using flat mode
 ```php
 <?php
 
