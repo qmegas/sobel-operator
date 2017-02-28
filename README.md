@@ -23,7 +23,7 @@ $image = imagecreatefromjpeg('1.jpg');
 header('Content-type: image/png');
 imagepng($sobel->applyFilter($image));
 ```
-<img src="/qmegas/sobel-operator/images/1.jpg">
+<img src="./images/1.jpg">
 
 Using threshold (value must be between 0-100)
 ```php
@@ -36,7 +36,7 @@ imagepng($sobel->applyFilter($image, [
 	'threshold' => 30,
 ]));
 ```
-<img src="/qmegas/sobel-operator/images/2.jpg">
+<img src="./images/2.jpg">
 
 Using flat mode
 ```php
@@ -50,4 +50,4 @@ imagepng($sobel->applyFilter($image, [
 	'threshold' => 30,
 ]));
 ```
-<img src="/qmegas/sobel-operator/images/3.jpg">
+<img src="./images/3.jpg">
